@@ -129,3 +129,16 @@ npm start
 ## Лицензия
 
 Проект распространяется под MIT. Это относится к исходному коду Земли, а не к контенту внешних источников.
+
+## Интеграция StreamLive v28.5
+
+«Земля» адаптирована под API и структуру движка StreamLive v28.5. По умолчанию подключены четыре источника:
+
+- `https://domtv.blyz.ru`
+- `https://streamlivetv.freedev.app`
+- `https://streamliveru.web1.websitegame.ru`
+- `https://mtwixoffbe846.users.myrn.ru`
+
+Адаптер использует штатные endpoint'ы движка: `api.php`, `api_channels.php`, `api_videos.php`, `platforma/api_channels.php`, `platforma/api_forum.php`, а для резервного чтения — RSS. Видео открываются через штатный `video_embed.php`, форум — через `forum_thread.php`.
+
+Если задан `ZEMLYA_SOURCES_JSON`, он заменяет встроенный список источников.
