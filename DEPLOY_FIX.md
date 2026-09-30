@@ -1,27 +1,12 @@
-# Zemlya deployment fix
+# Zemlya deployment fixes
 
-This build is prepared for Vercel, Tatnet.ru, Onreza, Layero and similar Next.js build environments.
+This build includes compatibility fixes for Vercel, Tatnet.ru, Onreza, Layero and similar Next.js hosts.
 
 ## Fixed
 
-The project uses imports such as `@/lib/config`, `@/lib/fetcher` and `@/lib/seo`. The TypeScript configuration now explicitly defines the `@/*` alias:
+- `tsconfig.json` includes the `@/*` path alias used by the app.
+- `app/sitemap.ts` explicitly uses `MetadataRoute.Sitemap` so Next.js/TypeScript keeps `changeFrequency` as the required literal union instead of widening it to `string`.
 
-```json
-"baseUrl": ".",
-"paths": {
-  "@/*": ["./*"]
-}
-```
+The sitemap fix addresses errors such as:
 
-Without this mapping, the production build can fail with `Module not found: Can't resolve '@/lib/...'` even when the `lib/` directory is present.
-
-## Deployment
-
-Use the repository root as the project root and run:
-
-```bash
-npm install
-npm run build
-```
-
-No special path configuration should be required from the hosting provider.
+`Type 'string' is not assignable to type '"daily" | "always" | "hourly" | "weekly" | "monthly" | "yearly" | "never"'`.
