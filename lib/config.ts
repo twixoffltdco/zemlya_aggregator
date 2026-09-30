@@ -9,9 +9,15 @@ const defaultSources:Source[]=[
   {id:'myrn',name:'StreamLive Catalog',baseUrl:'https://mtwixoffbe846.users.myrn.ru'},
 ];
 
+function normalizeSources(value:unknown):Source[]{
+  if(!Array.isArray(value)||value.length===0)return [];
+  return value.filter((s:any)=>s&&typeof s==='object'&&typeof s.id==='string'&&typeof s.baseUrl==='string')
+    .map((s:any)=>({id:s.id,name:typeof s.name==='string'&&s.name?s.name:s.id,baseUrl:String(s.baseUrl).replace(/\/$/,''),apiUrl:typeof s.apiUrl==='string'&&s.apiUrl?s.apiUrl:undefined,apiKey:typeof s.apiKey==='string'&&s.apiKey?s.apiKey:undefined}));
+}
+
 export const sources:Source[]=(()=>{try{
   const raw=process.env.ZEMLYA_SOURCES_JSON;
-  if(raw)return JSON.parse(raw) as Source[];
+  if(raw){const parsed=normalizeSources(JSON.parse(raw));if(parsed.length)return parsed;}
 }catch{}
 return defaultSources.map((s)=>({...s,apiUrl:`${s.baseUrl}/api.php`}));
 })();
